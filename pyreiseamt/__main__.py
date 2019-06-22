@@ -16,10 +16,10 @@ def main():
                         help = "Countries to extract seperated by ';'. Extracts all countries if unused.")
     parser.add_argument("-o", "--output", 
                         help = "Where to save extracted information as JSON")
-    parser.add_argument("-s", "--sentiment", action='store_true', 
+    parser.add_argument("-s", "--sentiment", action = "store_true", 
                         help = "Add sentiment score")
-    parser.add_argument("-n", "--nameing", 
-                        help = "Correct nameing")
+    parser.add_argument("-n", "--nameing", action = "store_true",
+                        help = "Use the same name for every top section for every country")
     args = parser.parse_args()
     
     if args.command not in ["list", "extract"]:
@@ -32,7 +32,6 @@ def main():
     # Get latest Country Information
     print("Gathering latest data\r", end = "")
     countries = scraper.list_countries()                                        # Using internal scraper to get the name and links of all countries
-    
     # React to list command
     if args.command == "list":
         country_names = [x for x in countries]
@@ -61,6 +60,19 @@ def main():
         for country in countries_to_do:
             # Get Text
             result_tmp = scraper.extract_country(countries[country])            # This command will return the text for the selected country
+            # Correct Nameing
+            if args.nameing:
+                correct_names = ["Country", 
+                                 "Landesspezifische Sicherheitshinweise",
+                                 "Allgemeine Reiseinformationen",
+                                 "Medizinische Hinweise"]                       # Save correct variable names as list
+                i = 0
+                keys = list(result_tmp.keys())
+                for k in keys:                                                  # Since every country has the same variables in the same order,
+                    content = result_tmp[k]                                     # we loop through the dictionary, temporarly delete the content
+                    del result_tmp[k]                                           # and insert it again under the correct name
+                    result_tmp[correct_names[i]] = content
+                    i += 1
             # Calculate sentiment for text
             if args.sentiment:
                 top_cats = [x for x in result_tmp if x != "Country"]            # Get all top categories except for country name (no sentiment calculation needed)
