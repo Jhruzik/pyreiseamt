@@ -10,14 +10,14 @@ def main():
     # Parse User Input
     parser = argparse.ArgumentParser(description = "Gather country specific information from German Foreign Office")
     parser.add_argument("command", help = "Command to execute [list or extract]")
-    parser.add_argument("-c", "--countries", help = "Countries to extract [seperate by ;]")
+    parser.add_argument("-c", "--countries", help = "Countries to extract seperated by ';'. Extracts all countries if unused.")
     parser.add_argument("-o", "--output", help = "Where to save extracted information as JSON")
     args = parser.parse_args()
     
     if args.command not in ["list", "extract"]:
         raise ValueError("command should be either 'list' or 'extract'")
-    if args.command == "extract" and args.countries is None:
-        raise ValueError("specify the countries to extract (seperate by ';')")
+    if args.command == "extract" and args.output is None:
+        raise ValueError ("Please specify output")
     if args.command == "extract" and not args.output.endswith(".json"):
         raise ValueError("output must end with .json")
         
@@ -44,7 +44,10 @@ def main():
         
     # React to extract command
     if args.command == "extract":
-        countries_to_do = args.countries.split(";")
+        if args.countries is not None:
+            countries_to_do = args.countries.split(";")
+        else:
+            countries_to_do = [x for x in countries]
         result_extract = list()
         for country in countries_to_do:
             result_tmp = scraper.extract_country(countries[country])
