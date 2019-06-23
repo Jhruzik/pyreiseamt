@@ -25,7 +25,7 @@ setuptools.setup(
     ],
     entry_points = {
             "console_scripts" : [
-                    "pyreiseamt = pybundestag.__main__:main"
+                    "pyreiseamt = pyreiseamt.__main__:main"
                     ]
             }
 )
