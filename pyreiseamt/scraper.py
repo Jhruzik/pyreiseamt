@@ -10,6 +10,19 @@ import re
 
 # List all available Countries
 def list_countries():
+    """List all available countries for extraction
+    
+    This function will create a connection to the
+    website of the German Foreign Office and 
+    fetch the latest list of available countries.
+    
+
+    Returns
+    -----------
+    The function returns None. However, a formatted
+    list of countries is printed to the screen.
+    Four countries per row, sperated by ' | '.
+    """
     # Open First Page
     base_url = "https://www.auswaertiges-amt.de/de/ReiseUndSicherheit/reise-und-sicherheitshinweise"
     base_html = requests.get(base_url).content
@@ -63,6 +76,29 @@ def list_countries():
     
 # Extract Information for a Single Country
 def extract_country(url):
+    """Scrape information for a given country
+    
+    Given a certain countries url, this function
+    will return a dictionary containing
+    information on country specific securitiy
+    issues, general travel guidance, and medical
+    issues. Every top category is subdivided
+    by several sub-categories.
+    
+    The result will be a structured dictionary.
+    
+    Parameters
+    -----------
+    url: string
+        The url of a single country as string.
+        
+    Returns
+    -----------
+    text_dict: A dictionary consisting of four
+    top categories. Every top category is associated
+    with another dictionary containing sub-categories
+    for the respective top category.
+    """
     # Find Raw Content
     country_html = requests.get(url).content
     country_soup = BeautifulSoup(country_html, "lxml")
@@ -109,38 +145,38 @@ def extract_country(url):
     
    
     # Get Country Specific Info
-    def country_specific_filter(tag):
+    def _country_specific_filter(tag):
         cond1 = tag.name == "h2"
         cond2_1 = "Landesspezifische Sicherheitshinweise" in tag.get_text()
         cond2_2 = "Landesspezifischer Sicherheitshinweis" in tag.get_text()
         cond2_3 = "Sicherheit" in tag.get_text()
         return(cond1 & (cond2_1 | cond2_2 | cond2_3))
         
-    start = country_soup.find(country_specific_filter)
+    start = country_soup.find(_country_specific_filter)
     end = "h2"
     specific_info = _collect_text(start, end)
     text_dict.update(specific_info)
     
     # Get General Information
-    def general_filter(tag):
+    def _general_filter(tag):
         cond1 = tag.name == "h2"
         cond2_1 = "Allgemeine Reiseinformationen" in tag.get_text()
         cond2_2 = "Reiseinfos" in tag.get_text()
         return(cond1 & (cond2_1 | cond2_2))
         
-    start = country_soup.find(general_filter)
+    start = country_soup.find(_general_filter)
     end = "h2"
     general_info = _collect_text(start, end)
     text_dict.update(general_info)
     
     #Get Medical Information
-    def medical_filter(tag):
+    def _medical_filter(tag):
         cond1 = tag.name == "h2"
         cond2_1 = "Medizinische Hinweise" in tag.get_text()
         cond2_2 = "Gesundheit" in tag.get_text()
         return(cond1 & (cond2_1 | cond2_2))
         
-    start = country_soup.find(medical_filter)
+    start = country_soup.find(_medical_filter)
     end = "h2"
     medical_info = _collect_text(start, end)
     text_dict.update(medical_info)
