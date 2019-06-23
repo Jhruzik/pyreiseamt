@@ -36,7 +36,7 @@ pyreiseamt extract -o ~/all_countries.json
 If you want to limit the crawl job to certain countries, you can use the *-c* argument. A single string should list all countries you want to extract, seperated by a semicolon.
 
 ```bash
-pyreiseamt extract -o ~/all_countries.json -c "Frankreich;Georgien;Griechenland"
+pyreiseamt extract -o ~/select_countries.json -c "Frankreich;Georgien;Griechenland"
 ```
 
 This will limit the extraction to France, Georgia, and Greece.

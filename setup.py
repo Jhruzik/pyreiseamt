@@ -21,7 +21,7 @@ setuptools.setup(
         "Development Status :: 3 - Alpha",
         "Environment :: Console",
         "Intended Audience :: Science/Research",
-        "Topic :: Text Processing"
+        "Topic :: WWW/HTTP"
     ],
     entry_points = {
             "console_scripts" : [
