@@ -11,6 +11,11 @@ setuptools.setup(
     description="Package to crawl country information of German Foreign Office",
     long_description=long_description,
     long_description_content_type="text/markdown",
+    include_package_data=True,
+    zip_safe=False,
+    package_data = {
+            "" : ["*.obj"]
+            },
     url="https://github.com/Jhruzik/pyreiseamt",
     packages=setuptools.find_packages(),
     install_requires=["requests", "bs4", "lxml"],
@@ -21,7 +26,7 @@ setuptools.setup(
         "Development Status :: 3 - Alpha",
         "Environment :: Console",
         "Intended Audience :: Science/Research",
-        "Topic :: WWW/HTTP"
+        "Topic :: Internet :: WWW/HTTP"
     ],
     entry_points = {
             "console_scripts" : [

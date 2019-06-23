@@ -3,8 +3,8 @@
 def main():
     
     # Import Modules
-    import scraper
-    import scorer
+    import pyreiseamt.scraper
+    import pyreiseamt.scorer
     import argparse
     import json
     
@@ -31,7 +31,7 @@ def main():
         
     # Get latest Country Information
     print("Gathering latest data\r", end = "")
-    countries = scraper.list_countries()                                        # Using internal scraper to get the name and links of all countries
+    countries = pyreiseamt.scraper.list_countries()                                        # Using internal scraper to get the name and links of all countries
     # React to list command
     if args.command == "list":
         country_names = [x for x in countries]
@@ -59,7 +59,7 @@ def main():
         result_extract = list()
         for country in countries_to_do:
             # Get Text
-            result_tmp = scraper.extract_country(countries[country])            # This command will return the text for the selected country
+            result_tmp = pyreiseamt.scraper.extract_country(countries[country])            # This command will return the text for the selected country
             # Correct Nameing
             if args.nameing:
                 correct_names = ["Country", 
@@ -84,7 +84,7 @@ def main():
                         top_cat_text = top_cat_text + " " + \
                                        result_tmp[top_cat][sub_cat]
                     top_cat_text = top_cat_text.strip()
-                    score = scorer.score_text(top_cat_text)                     # Use internal sentiment scorer on top_cat_text for the selected top category
+                    score = pyreiseamt.scorer.score_text(top_cat_text)                     # Use internal sentiment scorer on top_cat_text for the selected top category
                     top_cat_sentiment[top_cat] = score                          # Add sentiment score for top section to sentiment dictionary
                 result_tmp["Sentiment"] = top_cat_sentiment                     # Add sentiment dictionary to result dictionary of country
             result_extract.append(result_tmp)
