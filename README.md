@@ -47,7 +47,7 @@ There are two remaining options to the extract command. The presence of *-s* wil
 pyreiseamt extract -o ~/all_countries.json -s -n
 ```
 
-####Use the Scraper in your own scripts
+#### Use the Scraper in your own scripts
 If you prefer to use the built-in crawler in your scripts, you can do so by importing the scraper from the package (assuming that you've installed the package).
 
 ```python
